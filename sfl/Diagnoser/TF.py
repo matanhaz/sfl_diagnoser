@@ -12,7 +12,7 @@ class TF(object):
     def __init__(self, matrix, error, diagnosis):
         self.activity = list(zip(range(len(matrix)), map(tuple, matrix), error))
         self.diagnosis = diagnosis
-        self.active_components = dict(map(lambda a: (a[0], filter(functools.partial(tuple.__getitem__, a[1]), self.diagnosis)), self.activity))
+        self.active_components = dict(map(lambda a: (a[0], list(filter(functools.partial(tuple.__getitem__, a[1]), self.diagnosis))), self.activity))
         self.max_value = None
 
     def get_active_components(self):
