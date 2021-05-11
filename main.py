@@ -5,4 +5,5 @@ from sfl.Diagnoser.Diagnosis_Results import Diagnosis_Results
 ei = read_json_planning_file(r'test_matrix1')
 ei.diagnose()
 print(Diagnosis_Results(ei.diagnoses, ei.initial_tests, ei.error, ei.pool, ei.get_id_bugs()).metrics)
+print(Diagnosis_Results(ei.diagnoses, ei.initial_tests, ei.error, ei.pool, ei.get_id_bugs()).diagnoses)
 pass
