@@ -29,8 +29,9 @@ class TFCompSimilarity(TF):
             return e + ((-2.0 * e + 1.0) * reduce(operator.mul,
                                                    list(map(h_dict[test_id].get, self.get_active_components()[test_id])), 1.0))
         original_calc =  reduce(operator.mul, list(map(lambda x: test_prob(*x), self.get_activity())), 1.0)
-        # for i in range(len(self.diagnosis)):
-        #     original_calc *= (self.CompSimilarity[i] ** self.get_number_of_repetioions(self.diagnosis[i]))
+        for i in range(len(self.diagnosis)):
+            #original_calc *= (self.CompSimilarity[i] ** self.get_number_of_repetioions(self.diagnosis[i]))
+            original_calc *= (self.CompSimilarity[i])
         return original_calc
 
     def get_number_of_repetioions(self, comp_index):

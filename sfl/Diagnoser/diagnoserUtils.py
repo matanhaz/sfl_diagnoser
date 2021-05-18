@@ -113,17 +113,31 @@ def save_ds_to_matrix_file(ds, out_file):
     write_planning_file(out_file, list(map(lambda c: Experiment_Data().COMPONENTS_NAMES[c], Experiment_Data().BUGS), tests_details))
 
 
-def read_json_planning_file(file_path):
+def read_json_planning_file(file_path, good_sim, bad_sim, experiment_type):
     with open(file_path, "r") as f:
         instance = json.loads(f.read())
-    return read_json_planning_instance(instance)
+    if experiment_type == 'CompSimilarity':
+        instance["CompSimilarity"] = create_similarity_vector(instance, good_sim, bad_sim)
+    return read_json_planning_instance(instance,experiment_type)
+
+def create_similarity_vector(instance, good_sim, bad_sim):
+    similarities = []
+    bugs = instance['bugs']
+    for comp in instance['components_names']:
+        if comp[1] in bugs:
+            similarities.append(good_sim)
+        else:
+            similarities.append(bad_sim)
+
+    return similarities
 
 
-def read_json_planning_instance(instance):
+
+def read_json_planning_instance(instance, experiment_type):
     assert 'bugs' in instance,"bugs are not defined in planning_file"
     assert 'tests_details' in instance,"tests_details are not defined in planning_file"
     assert 'initial_tests' in instance,"initial_tests are not defined in planning_file"
-    experiment_type = instance.get('experiment_type', None)
+    #experiment_type = instance.get('experiment_type', None)
     testsPool = dict(map(lambda td: (td[0], td[1]), instance['tests_details']))
     error = dict(map(lambda td: (td[0], td[2]), instance['tests_details']))
     components = dict(instance['components_names'])

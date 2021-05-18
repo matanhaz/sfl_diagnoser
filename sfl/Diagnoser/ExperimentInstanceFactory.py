@@ -12,8 +12,8 @@ class ExperimentInstanceFactory(object):
             sorted(list(map(lambda x: x[0], filter(lambda x: x[1] == 1, error.items())))))
 
     @staticmethod
-    def get_experiment_instance(initials, error, priors, bugs, pool, components, estimated_pool, experiment_type='CompSimilarity', **kwargs):
+    def get_experiment_instance(initials, error, priors, bugs, pool, components, estimated_pool, experiment_type, **kwargs):
         classes = {'normal': ExperimentInstance,
                    'CompSimilarity': ExperimentInstanceCompSimilarity}
                    #, 'optimize': ExperimentInstanceOptimize.Instances_Management().get_instance}
-        return classes.get(experiment_type, classes['CompSimilarity'])(initials, error, priors, bugs, pool, components, estimated_pool, **kwargs)
+        return classes.get(experiment_type, classes[experiment_type])(initials, error, priors, bugs, pool, components, estimated_pool, **kwargs)
