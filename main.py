@@ -8,20 +8,25 @@ import csv
 HIGHER_SIMILARITIES = [0.6,0.7,0.8,0.9,1]
 LOWER_SIMILARITIES = [0.4,0.3,0.2,0.1]
 MATRIXES = os.listdir(os.getcwd()+"\\matrixes")
+EPSILON = 0.01
 
 
 rows = []
-rows.append(['real bug diagnose sim','unreal bug diagnose sim', 'precision','recall', 'original precision', 'original recall' ])
+rows.append(['real bug diagnose sim','unreal bug diagnose sim', 'precision','recall','wasted', 'original precision', 'original recall','original wasted' ])
 
 
 def diagnose(matrix_name):
-
+    # getting basic values
     ei = read_json_planning_file(matrix_name,0,0, experiment_type = 'normal')
     ei.diagnose()
     diagnoses = Diagnosis_Results(ei.diagnoses, ei.initial_tests, ei.error, ei.pool, ei.get_id_bugs()).metrics
     original_precision = diagnoses['precision']
     original_recall = diagnoses['recall']
-    print(original_precision)
+    original_wasted = diagnoses['wasted']
+
+
+    if(original_precision < EPSILON or original_precision > 1- EPSILON):
+        return
 
     for good_sim in HIGHER_SIMILARITIES:
         for bad_sim in LOWER_SIMILARITIES:
@@ -33,7 +38,7 @@ def diagnose(matrix_name):
             diagnoses = Diagnosis_Results(ei.diagnoses, ei.initial_tests, ei.error, ei.pool, ei.get_id_bugs()).metrics
             #print(Diagnosis_Results(ei.diagnoses, ei.initial_tests, ei.error, ei.pool, ei.get_id_bugs()).diagnoses)
             print(diagnoses['precision'])
-            rows.append([good_sim,bad_sim, diagnoses['precision'],diagnoses['recall'],original_precision,original_recall])
+            rows.append([good_sim,bad_sim, diagnoses['precision'],diagnoses['recall'],diagnoses['wasted'],original_precision,original_recall,original_wasted])
 
 
 

@@ -132,6 +132,11 @@ class Diagnosis_Results(object):
         recall_accum=0
         precision_accum=0
         validComps=[x for x in set(reduce(list.__add__, self.pool.values())) if x not in self.get_bugs()]
+
+        self.diagnoses.sort(key = lambda x: x.probability, reverse = True)
+
+        self.diagnoses = self.diagnoses[:5]
+
         for d in self.diagnoses:
             dg=d.diagnosis
             pr=d.probability
